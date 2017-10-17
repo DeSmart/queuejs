@@ -15,7 +15,9 @@ const dummyConnector = (listener = null) => ({
     listener = fn
   },
 
-  stubJob: job => listener && listener(job)
+  stubJob: job => listener && listener(job),
+
+  listen: () => {}
 })
 
 describe('manager', () => {
@@ -46,5 +48,19 @@ describe('manager', () => {
     connector.stubJob(expectedJob)
 
     expect(spy).to.have.been.calledWith(expectedJob)
+  })
+
+  it('proxies listen() to connector', () => {
+    const connector = dummyConnector()
+    const stub = sinon.stub(connector, 'listen')
+    stub.returns(true)
+
+    const queue = manager(connector)
+    const result = queue.listen()
+
+    expect(stub).to.have.been.calledWith('default')
+    expect(result).to.equal(true)
+
+    stub.restore()
   })
 })

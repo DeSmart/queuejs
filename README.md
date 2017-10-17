@@ -30,6 +30,19 @@ queue.push('example.job', {
 })
 ```
 
+# listening to new messages
+
+```
+manager :: listen(queue = 'default')
+```
+
+By default manager will **not** listen for incoming messages.
+
+To start listening for new messages it's required to call `listen()` method.
+Listener will wait for new messages, convert them to `Job` object and pass it to bound handlers.
+
+By default listener will check for messages in `default` queue.
+
 # connectors
 
 Queue manager uses connectors to handle various queue backends.

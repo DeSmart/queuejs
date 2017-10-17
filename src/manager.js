@@ -16,6 +16,10 @@ const manager = (
 
     on (jobName, fn) {
       events.on(jobName, fn)
+    },
+
+    listen (queue = 'default') {
+      return connector.listen(queue)
     }
   }
 }
