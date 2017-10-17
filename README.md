@@ -30,6 +30,20 @@ queue.push('example.job', {
 })
 ```
 
+# pushing messages to queue
+
+```
+manager :: push(jobName, payload, [queue = 'default'])
+```
+
+To push new message to queue backend it's required to provide:
+
+* `jobName` (Sjtring) unique name of the job
+* `payload` (Object) object containing additional data for job handler
+* `queue` (String) name of the queue to which message should be sent
+
+By default all messages will be queued in queue named `default`.
+
 # listening to new messages
 
 ```
@@ -38,7 +52,7 @@ manager :: listen(queue = 'default')
 
 By default manager will **not** listen for incoming messages.
 
-To start listening for new messages it's required to call `listen()` method.
+To start listening for new messages it's required to call `listen()` method.  
 Listener will wait for new messages, convert them to `Job` object and pass it to bound handlers.
 
 By default listener will check for messages in `default` queue.
