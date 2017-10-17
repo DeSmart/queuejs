@@ -1,15 +1,15 @@
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
-const manager = require('../src/manager')
-const job = require('../src/job')
+
+const { manager, job } = require('../')
 
 chai.use(sinonChai)
 
 const { expect } = chai
 
 const dummyConnector = (listener = null) => ({
-  push: (name, payload, queue) => {},
+  push: (name, payload, queue) => { },
 
   onJob: fn => {
     listener = fn
