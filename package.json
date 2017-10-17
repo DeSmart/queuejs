@@ -1,0 +1,26 @@
+{
+  "name": "@desmart/queue",
+  "version": "0.0.1",
+  "description": "Message Queue client abstraction",
+  "main": "index.js",
+  "author": "Radoslaw Mejer <radmen@radmen.info>",
+  "license": "MIT",
+  "scripts": {
+    "test": "mocha ./test",
+    "lint": "standard",
+    "lint:fix": "standard --fix",
+    "prepush": "npm run lint"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "husky": "^0.14.3",
+    "mocha": "^4.0.1",
+    "standard": "^10.0.3"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  }
+}
