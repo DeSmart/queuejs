@@ -1,6 +1,6 @@
 const noop = _ => { }
 
-module.exports = ({ name, queue, attempts = 1, payload = {}, remove = noop, release = noop }) => ({
+const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release = noop }) => ({
   get name () {
     return name
   },
@@ -19,5 +19,18 @@ module.exports = ({ name, queue, attempts = 1, payload = {}, remove = noop, rele
 
   remove,
 
-  release
+  release,
+
+  retry () {
+    return job({
+      name,
+      queue,
+      attempts: attempts + 1,
+      payload,
+      remove,
+      release
+    })
+  }
 })
+
+module.exports = job

@@ -1,5 +1,5 @@
 const EventEmitter = require('events')
-const syncConnector = require('./connectors/syncConnector')
+const syncConnector = require('./connector/syncConnector')
 
 const manager = (
   connector = syncConnector(),
