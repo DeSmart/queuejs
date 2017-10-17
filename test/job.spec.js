@@ -49,4 +49,18 @@ describe('job', () => {
 
     expect(retriedJob).to.deep.include(expectedData)
   })
+
+  describe('serialization', () => {
+    it('toJSON()', () => {
+      const data = {
+        name: 'test',
+        queue: 'default',
+        attempts: 1,
+        payload: { foo: 1 }
+      }
+      const newJob = job(data)
+
+      expect(newJob.toJSON()).to.deep.equal(data)
+    })
+  })
 })

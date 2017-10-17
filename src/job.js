@@ -30,6 +30,17 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
       remove,
       release
     })
+  },
+
+  /**
+   * Export job metadata to JSON
+   *
+   * This method will skip export of passed methods
+   *
+   * @return {Object}
+   */
+  toJSON () {
+    return { name, queue, payload, attempts }
   }
 })
 
