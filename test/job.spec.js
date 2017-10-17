@@ -62,5 +62,21 @@ describe('job', () => {
 
       expect(newJob.toJSON()).to.deep.equal(data)
     })
+
+    it('fromJSON()', () => {
+      const remove = () => {}
+      const release = () => {}
+      const json = {
+        name: 'test',
+        queue: 'default',
+        attempts: 1,
+        payload: { foo: 1 }
+      }
+
+      const methods = { remove, release }
+      const newJob = job.fromJSON(json, methods)
+
+      expect(newJob).to.deep.include(Object.assign({}, json, methods))
+    })
   })
 })
