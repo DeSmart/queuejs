@@ -4,6 +4,10 @@ const getHandler = (name, handlers) => handlers[name]
 
 module.exports = (handlers = {}) => ({
   add (jobName, fn) {
+    if (handlers[jobName]) {
+      throw new Error(`job ${jobName} has defined handler`)
+    }
+
     handlers[jobName] = fn
   },
 

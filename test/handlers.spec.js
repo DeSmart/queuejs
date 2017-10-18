@@ -29,4 +29,15 @@ describe('job handlers', () => {
 
     fn().then(done, done)
   })
+
+  it('fails to add another handler for job', () => {
+    const jobHandlers = handlers()
+    jobHandlers.add('test.job', () => {})
+
+    const fn = () => {
+      jobHandlers.add('test.job', () => {})
+    }
+
+    expect(fn).to.throw()
+  })
 })
