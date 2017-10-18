@@ -14,7 +14,7 @@ describe('job handlers', () => {
     const jobHandlers = handlers()
     const spy = sinon.spy()
     const newJob = job({ name: 'test.job' })
-    jobHandlers.add('test.job', spy)
+    jobHandlers.bind('test.job', spy)
 
     await jobHandlers.dispatchJob(newJob)
 
@@ -32,10 +32,10 @@ describe('job handlers', () => {
 
   it('fails to add another handler for job', () => {
     const jobHandlers = handlers()
-    jobHandlers.add('test.job', () => {})
+    jobHandlers.bind('test.job', () => {})
 
     const fn = () => {
-      jobHandlers.add('test.job', () => {})
+      jobHandlers.bind('test.job', () => {})
     }
 
     expect(fn).to.throw()
