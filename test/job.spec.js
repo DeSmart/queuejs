@@ -84,8 +84,6 @@ describe('job', () => {
     })
 
     it('fromJSON()', () => {
-      const remove = () => { }
-      const release = () => { }
       const json = {
         name: 'test',
         queue: 'default',
@@ -93,10 +91,9 @@ describe('job', () => {
         payload: { foo: 1 }
       }
 
-      const methods = { remove, release }
-      const newJob = job.fromJSON(json, methods)
+      const newJob = job.fromJSON(json)
 
-      expect(newJob).to.deep.include(Object.assign({}, json, methods))
+      expect(newJob).to.deep.include(json)
     })
   })
 })

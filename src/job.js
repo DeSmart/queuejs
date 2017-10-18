@@ -66,14 +66,9 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
  * Create new job from metadata
  *
  * @param {Object} json
- * @param {Object} methods callbacks for remove() and release() methods
  * @return {Object}
  */
-job.fromJSON = (json, { remove = noop, release = noop }) => job(Object.assign(
-  {},
-  json,
-  { remove, release }
-))
+job.fromJSON = job
 
 /**
  * Create new job instance
