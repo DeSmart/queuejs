@@ -41,6 +41,24 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
    */
   toJSON () {
     return { name, queue, payload, attempts }
+  },
+
+  /**
+   * Create copy of job with new actions
+   *
+   * @param {Object} actions jobs new actions;
+   *                         both remove() and release() will be replaced with them
+   * @return {Object}        copy of job with new actions
+   */
+  withActions ({ remove = noop, release = noop }) {
+    return job({
+      name,
+      queue,
+      attempts,
+      payload,
+      remove,
+      release
+    })
   }
 })
 

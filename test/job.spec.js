@@ -57,6 +57,19 @@ describe('job', () => {
     expect(newJob.toJSON()).to.deep.equal(expectedJob.toJSON())
   })
 
+  it('can be extended with actions', () => {
+    const newJob = job.of('test')
+    const actions = {
+      release: () => {},
+      remove: () => {}
+    }
+
+    const jobWithActions = newJob.withActions(actions)
+
+    expect(jobWithActions).to.deep.include(actions)
+    expect(jobWithActions.toJSON()).to.deep.include(newJob.toJSON())
+  })
+
   describe('serialization', () => {
     it('toJSON()', () => {
       const data = {
