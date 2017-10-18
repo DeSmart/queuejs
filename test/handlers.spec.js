@@ -20,4 +20,13 @@ describe('job handlers', () => {
 
     expect(spy).to.have.been.calledWith(newJob)
   })
+
+  it('does not fail when dispatching job without handler', (done) => {
+    const jobHandlers = handlers()
+    const fn = () => {
+      return jobHandlers.dispatchJob(job({ name: 'test' }))
+    }
+
+    fn().then(done, done)
+  })
 })
