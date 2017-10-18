@@ -57,4 +57,14 @@ job.fromJSON = (json, { remove = noop, release = noop }) => job(Object.assign(
   { remove, release }
 ))
 
+/**
+ * Create new job instance
+ *
+ * @param {String} name
+ * @param {Object} payload
+ * @param {String} queue
+ * @returns {Object}
+ */
+job.of = (name, payload = {}, queue = 'default') => job({ name, payload, queue })
+
 module.exports = job

@@ -50,6 +50,13 @@ describe('job', () => {
     expect(retriedJob).to.deep.include(expectedData)
   })
 
+  it('can be created using .of()', () => {
+    const newJob = job.of('test', { foo: 1 })
+    const expectedJob = job({ name: 'test', queue: 'default', payload: { foo: 1 } })
+
+    expect(newJob.toJSON()).to.deep.equal(expectedJob.toJSON())
+  })
+
   describe('serialization', () => {
     it('toJSON()', () => {
       const data = {
@@ -64,8 +71,8 @@ describe('job', () => {
     })
 
     it('fromJSON()', () => {
-      const remove = () => {}
-      const release = () => {}
+      const remove = () => { }
+      const release = () => { }
       const json = {
         name: 'test',
         queue: 'default',
