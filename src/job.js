@@ -1,6 +1,6 @@
 const noop = _ => { }
 
-const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release = noop }) => ({
+const job = ({ name, queue, attempts = 0, payload = {}, remove = noop, release = noop }) => ({
   get name () {
     return name
   },
@@ -21,7 +21,7 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
 
   release,
 
-  retry () {
+  increment () {
     return job({
       name,
       queue,

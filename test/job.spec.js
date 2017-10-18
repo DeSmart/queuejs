@@ -14,7 +14,7 @@ describe('job', () => {
       name: 'test',
       queue: 'default',
       payload: { foo: 1 },
-      attempts: 1
+      attempts: 0
     })
   })
 
@@ -36,7 +36,7 @@ describe('job', () => {
     expect(spy).to.have.been.called // eslint-disable-line
   })
 
-  it('creates copy of job when retrying', () => {
+  it('creates copy of job when incrementing', () => {
     const data = {
       name: 'test',
       queue: 'default',
@@ -44,8 +44,8 @@ describe('job', () => {
       release: () => { },
       remove: () => { }
     }
-    const retriedJob = job(data).retry()
-    const expectedData = Object.assign({ attempts: 2 }, data)
+    const retriedJob = job(data).increment()
+    const expectedData = Object.assign({ attempts: 1 }, data)
 
     expect(retriedJob).to.deep.include(expectedData)
   })

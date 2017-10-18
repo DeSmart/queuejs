@@ -8,13 +8,15 @@ module.exports = (listeners = []) => ({
   },
 
   push (job) {
-    const jobToDispatch = job.withActions({
-      release (delay = 0) {
-        const requeue = () => dispatchJob(this.retry(), listeners)
+    const jobToDispatch = job
+      .increment()
+      .withActions({
+        release (delay = 0) {
+          const requeue = () => dispatchJob(this.increment(), listeners)
 
-        delay ? setTimeout(requeue, delay * 1000) : requeue()
-      }
-    })
+          delay ? setTimeout(requeue, delay * 1000) : requeue()
+        }
+      })
 
     dispatchJob(jobToDispatch, listeners)
   }

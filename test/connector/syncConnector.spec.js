@@ -22,7 +22,7 @@ describe('connector | syncConnector', () => {
 
     const spyArgs = spy.getCall(0).args
 
-    expect(spyArgs[0].toJSON()).to.deep.equal(newJob.toJSON())
+    expect(spyArgs[0].toJSON()).to.deep.equal(newJob.increment().toJSON())
   })
 
   it('releases job', () => {
