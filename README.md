@@ -11,7 +11,7 @@ npm i https://github.com/DeSmart/queuejs.git
 # example
 
 ```js
-const { manager } = require('@desmart/queue')
+const { manager, job } = require('@desmart/queue')
 const syncConnector = require('@desmart/queue/src/connector/syncConnector')
 
 const queue = manager(syncConnector())
@@ -25,30 +25,53 @@ queue.handle('example.job', ({ name, queue, payload, attempts }) => {
     console.log(attempts) // 1
 })
 
-queue.push('example.job', {
-    foo: 'bar'
+queue.push(job.of('example.job', { foo: 'bar' }))
+```
+
+# job
+
+Job contains information regarding task that should be handled:
+
+* `name` (String) name of the job
+* `queue` (String) name of the queue on which message had been sent
+* `attempts` (Number)
+* `payload` (Object)
+* `remove()` (Function) remove message from the queue backend; **has to be triggered once job is processed**
+* `release(delay = 0)` (Function) put job back to queue backend; optionally it can be delayed by given number of seconds
+
+## creating new job
+
+To create Job instance you can use `.of()` static method:
+
+```js
+const { job } = require('@desmart/queue')
+job.of(name, payload, queue)
+```
+
+`payload` and `queue` are optional. By default job will use `default` queue.
+
+## handlers
+
+Each job received by queue backend will be dispatched to it's handler. Job can have only one dedicated handler.
+
+```js
+queue.handle('example.job', ({ name, queue, payload, attempts }) => {
+    console.log(name) // example.job
+    console.log(queue) // default
+    console.log(payload) // { foo: 'bar' }
+    console.log(attempts) // 1
 })
 ```
 
-# pushing messages to queue
+## pushing to queue backend
 
+Every job can be pushed through manager to queue backend:
+
+```js
+queue.push(job.of('example.job', { foo: 'bar' }))
 ```
-manager :: push(jobName, payload, [queue = 'default'])
-```
 
-To push new message to queue backend it's required to provide:
-
-* `jobName` (String) unique name of the job
-* `payload` (Object) object containing additional data for job handler
-* `queue` (String) name of the queue to which message should be sent
-
-By default all messages will be queued in queue named `default`.
-
-# listening to new messages
-
-```
-manager :: listen(queue = 'default')
-```
+# listening to new jobs
 
 By default manager will **not** listen for incoming jobs.
 
@@ -57,15 +80,9 @@ Listener will wait for new queue messages, convert them to `Job` object and pass
 
 By default listener will check for messages in `default` queue.
 
-# job handlers
-
+```js
+manager.listen(queue)
 ```
-manager :: handle(jobName, handler)
-```
-
-Each new job received from queue backend will be dispatched to it's handler. Job can have only one dedicated handler.
-
-Handler is a function which will receive job instance as a first argument.
 
 # connectors
 
@@ -81,30 +98,7 @@ This package provides two basic connectors:
 Each connector has to implement following methods:
 
 * `onJob(fn)` accepts callback which should receive `Job` instance once new message is retrieved from backend
-* `push(name, payload, queue)` push message with given payload to selected queue
-
-# job
-
-Job is an object containing:
-
-* `name` (String) name of the job
-* `queue` (String) name of the queue on which message had been sent
-* `attempts` (Number)
-* `payload` (Object)
-* `remove()` (Function) remove message from the queue backend; **has to be triggered once job is processed**
-* `release(delay = 0)` (Function) put job back to queue backend; optionally it can be delayed by given number of seconds
-
-This module exports `job()` factory function:
-
-```js
-const { job } = require('@desmart/queue')
-
-const jobToDispatch = job({ 
-    name: 'example.job', 
-    queue: 'default', 
-    payload: { foo: 'bar' } 
-})
-```
+* `push(job)` push job to queue backend
 
 # development
 
