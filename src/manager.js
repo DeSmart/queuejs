@@ -1,21 +1,19 @@
-const EventEmitter = require('events')
+const createHandlers = require('./handlers')
 const syncConnector = require('./connector/syncConnector')
 
 const manager = (
   connector = syncConnector(),
-  events = new EventEmitter()
+  handlers = createHandlers()
 ) => {
-  connector.onJob(job => {
-    events.emit(job.name, job)
-  })
+  connector.onJob(handlers.dispatchJob)
 
   return {
     push (name, payload, queue = 'default') {
       return connector.push(name, payload, queue)
     },
 
-    on (jobName, fn) {
-      events.on(jobName, fn)
+    handle (jobName, fn) {
+      handlers.bind(jobName, fn)
     },
 
     listen (queue = 'default') {
