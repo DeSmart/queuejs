@@ -1,5 +1,3 @@
-const job = require('../job')
-
 const dispatchJob = (job, listeners) => {
   listeners.forEach(fn => fn(job))
 }
@@ -9,11 +7,8 @@ module.exports = (listeners = []) => ({
     listeners.push(fn)
   },
 
-  push (name, payload, queue) {
-    const jobToDispatch = job({
-      name,
-      payload,
-      queue,
+  push (job) {
+    const jobToDispatch = job.withActions({
       release (delay = 0) {
         const requeue = () => dispatchJob(this.retry(), listeners)
 

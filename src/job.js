@@ -41,6 +41,24 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
    */
   toJSON () {
     return { name, queue, payload, attempts }
+  },
+
+  /**
+   * Create copy of job with new actions
+   *
+   * @param {Object} actions jobs new actions;
+   *                         both remove() and release() will be replaced with them
+   * @return {Object}        copy of job with new actions
+   */
+  withActions ({ remove = noop, release = noop }) {
+    return job({
+      name,
+      queue,
+      attempts,
+      payload,
+      remove,
+      release
+    })
   }
 })
 
@@ -48,13 +66,18 @@ const job = ({ name, queue, attempts = 1, payload = {}, remove = noop, release =
  * Create new job from metadata
  *
  * @param {Object} json
- * @param {Object} methods callbacks for remove() and release() methods
  * @return {Object}
  */
-job.fromJSON = (json, { remove = noop, release = noop }) => job(Object.assign(
-  {},
-  json,
-  { remove, release }
-))
+job.fromJSON = job
+
+/**
+ * Create new job instance
+ *
+ * @param {String} name
+ * @param {Object} payload
+ * @param {String} queue
+ * @returns {Object}
+ */
+job.of = (name, payload = {}, queue = 'default') => job({ name, payload, queue })
 
 module.exports = job

@@ -9,7 +9,7 @@ chai.use(sinonChai)
 const { expect } = chai
 
 const dummyConnector = (listener = null) => ({
-  push: (name, payload, queue) => { },
+  push: (job) => { },
 
   onJob: fn => {
     listener = fn
@@ -28,11 +28,12 @@ describe('manager', () => {
 
     const queue = manager(connector)
     const payload = { foo: 1 }
+    const newJob = job.of('job.name', payload)
 
-    const result = queue.push('job.name', payload)
+    const result = queue.push(newJob)
 
     expect(result).to.equal(true)
-    expect(stub).to.have.been.calledWith('job.name', payload, 'default')
+    expect(stub).to.have.been.calledWith(newJob)
 
     stub.restore()
   })

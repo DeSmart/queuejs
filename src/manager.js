@@ -8,8 +8,8 @@ const manager = (
   connector.onJob(handlers.dispatchJob)
 
   return {
-    push (name, payload, queue = 'default') {
-      return connector.push(name, payload, queue)
+    push (job) {
+      return connector.push(job)
     },
 
     handle (jobName, fn) {

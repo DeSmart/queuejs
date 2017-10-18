@@ -50,6 +50,26 @@ describe('job', () => {
     expect(retriedJob).to.deep.include(expectedData)
   })
 
+  it('can be created using .of()', () => {
+    const newJob = job.of('test', { foo: 1 })
+    const expectedJob = job({ name: 'test', queue: 'default', payload: { foo: 1 } })
+
+    expect(newJob.toJSON()).to.deep.equal(expectedJob.toJSON())
+  })
+
+  it('can be extended with actions', () => {
+    const newJob = job.of('test')
+    const actions = {
+      release: () => {},
+      remove: () => {}
+    }
+
+    const jobWithActions = newJob.withActions(actions)
+
+    expect(jobWithActions).to.deep.include(actions)
+    expect(jobWithActions.toJSON()).to.deep.include(newJob.toJSON())
+  })
+
   describe('serialization', () => {
     it('toJSON()', () => {
       const data = {
@@ -64,8 +84,6 @@ describe('job', () => {
     })
 
     it('fromJSON()', () => {
-      const remove = () => {}
-      const release = () => {}
       const json = {
         name: 'test',
         queue: 'default',
@@ -73,10 +91,9 @@ describe('job', () => {
         payload: { foo: 1 }
       }
 
-      const methods = { remove, release }
-      const newJob = job.fromJSON(json, methods)
+      const newJob = job.fromJSON(json)
 
-      expect(newJob).to.deep.include(Object.assign({}, json, methods))
+      expect(newJob).to.deep.include(json)
     })
   })
 })
