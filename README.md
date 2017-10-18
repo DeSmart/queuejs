@@ -18,7 +18,7 @@ const queue = manager(syncConnector())
 
 // syncConnector will dispatch job immediately
 // in this case it's required to attach listeners before job is pushed to queue
-queue.on('example.job', ({ name, queue, payload, attempts }) => {
+queue.handle('example.job', ({ name, queue, payload, attempts }) => {
     console.log(name) // example.job
     console.log(queue) // default
     console.log(payload) // { foo: 'bar' }
@@ -38,7 +38,7 @@ manager :: push(jobName, payload, [queue = 'default'])
 
 To push new message to queue backend it's required to provide:
 
-* `jobName` (Sjtring) unique name of the job
+* `jobName` (String) unique name of the job
 * `payload` (Object) object containing additional data for job handler
 * `queue` (String) name of the queue to which message should be sent
 
@@ -50,12 +50,22 @@ By default all messages will be queued in queue named `default`.
 manager :: listen(queue = 'default')
 ```
 
-By default manager will **not** listen for incoming messages.
+By default manager will **not** listen for incoming jobs.
 
-To start listening for new messages it's required to call `listen()` method.  
-Listener will wait for new messages, convert them to `Job` object and pass it to bound handlers.
+To start listening for new jobs it's required to call `listen()` method.  
+Listener will wait for new queue messages, convert them to `Job` object and pass it to bound handler.
 
 By default listener will check for messages in `default` queue.
+
+# job handlers
+
+```
+manager :: handle(jobName, handler)
+```
+
+Each new job received from queue backend will be dispatched to it's handler. Job can have only one dedicated handler.
+
+Handler is a function which will receive job instance as a first argument.
 
 # connectors
 

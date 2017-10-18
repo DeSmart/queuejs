@@ -37,14 +37,14 @@ describe('manager', () => {
     stub.restore()
   })
 
-  it('allows to add job listeners', () => {
+  it('allows to add job handlers', () => {
     const spy = sinon.spy()
     const expectedJob = job({ name: 'job.name', queue: 'default', payload: { foo: 1 } })
 
     const connector = dummyConnector()
     const queue = manager(connector)
 
-    queue.on('job.name', spy)
+    queue.handle('job.name', spy)
     connector.stubJob(expectedJob)
 
     expect(spy).to.have.been.calledWith(expectedJob)
