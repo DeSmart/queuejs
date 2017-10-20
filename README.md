@@ -5,7 +5,7 @@ This package provides a unified API across a variety of different queue backends
 # installation
 
 ```bash
-npm i https://github.com/DeSmart/queuejs.git
+npm i @desmart/queue
 ```
 
 # example
