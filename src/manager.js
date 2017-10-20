@@ -16,8 +16,8 @@ const manager = (
       handlers.bind(jobName, fn)
     },
 
-    listen (queue = 'default') {
-      return connector.listen(queue)
+    listen (queue = 'default', options = {}) {
+      return connector.listen(queue, options)
     }
   }
 }

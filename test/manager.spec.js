@@ -54,12 +54,13 @@ describe('manager', () => {
   it('proxies listen() to connector', () => {
     const connector = dummyConnector()
     const stub = sinon.stub(connector, 'listen')
+    const options = { wait: 10 }
     stub.returns(true)
 
     const queue = manager(connector)
-    const result = queue.listen()
+    const result = queue.listen('default', options)
 
-    expect(stub).to.have.been.calledWith('default')
+    expect(stub).to.have.been.calledWith('default', options)
     expect(result).to.equal(true)
 
     stub.restore()
