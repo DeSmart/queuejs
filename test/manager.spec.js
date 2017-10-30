@@ -97,5 +97,39 @@ describe('manager', () => {
 
       expect(handler).to.have.been.calledWith(modifiedJob)
     })
+
+    it('should stop without calling next()', () => {
+      const handler = sinon.spy()
+      const connector = dummyConnector()
+
+      const queue = manager(connector)
+      queue.use(_ => {})
+
+      queue.handle('foo', handler)
+      connector.stubJob(job.of('job.name'))
+
+      expect(handler).not.to.have.been.called // eslint-disable-line
+    })
+
+    it('should call multiple middlewares', () => {
+      const handler = sinon.spy()
+      const connector = dummyConnector()
+      const fake = (job, next) => next(job)
+      const middlewares = [
+        sinon.stub().callsFake(fake),
+        sinon.stub().callsFake(fake)
+      ]
+
+      const queue = manager(connector)
+
+      middlewares.forEach(queue.use)
+
+      queue.handle('job.name', handler)
+      connector.stubJob(job.of('job.name'))
+
+      expect(middlewares[0]).to.have.been.calledOnce // eslint-disable-line
+      expect(middlewares[1]).to.have.been.calledOnce // eslint-disable-line
+      expect(handler).to.have.been.calledOnce // eslint-disable-line
+    })
   })
 })
