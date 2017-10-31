@@ -138,7 +138,7 @@ queue.use(autoCommit({
 }))
 ```
 
-Waites for job to finish and removes it from queue. If job failed it will be released back to queue.  
+Waits for job to finish and removes it from queue. If job failed it will be released back to queue.  
 This will works only when **job handler returns a Promise**.
 
 Job is released with exponential delay. After first attempt it will be released without a delay, with second attempt it will be delayed by 5 seconds, later by 15 seconds and so on.. By defualt, after multiple fails, job will be delayed by 6 hours.
