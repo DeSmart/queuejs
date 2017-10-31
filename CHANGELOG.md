@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - `autoCommit` middleware
 - `maxAttempts` middleware
 - `debug` middleware
+- `connector` convenience module
 
 ### Changed
 - Replaced job handlers with middlewares

@@ -2,7 +2,7 @@ const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
 
-const syncConnector = require('../../src/connector/syncConnector')
+const { syncConnector } = require('../../connector')
 const job = require('../../src/job')
 
 chai.use(sinonChai)

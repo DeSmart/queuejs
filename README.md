@@ -37,7 +37,7 @@ npm i @desmart/queue
 
 ```js
 const { manager, job } = require('@desmart/queue')
-const syncConnector = require('@desmart/queue/src/connector/syncConnector')
+const { syncConnector } = require('@desmart/queue/connector')
 
 const queue = manager(syncConnector())
 
@@ -139,7 +139,7 @@ Every middleware should (if possible) return the result of `next()`. Remember al
 ```js
 const { manager, job } = require('@desmart/queue')
 const { autoCommit } = require('@desmart/queue/middleware')
-const syncConnector = require('@desmart/queue/src/connector/syncConnector')
+const { syncConnector } = require('@desmart/queue/connector')
 
 const queue = manager(syncConnector())
 queue.use(autoCommit())
