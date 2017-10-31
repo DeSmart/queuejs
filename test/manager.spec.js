@@ -65,4 +65,71 @@ describe('manager', () => {
 
     stub.restore()
   })
+
+  describe('pipeline', () => {
+    it('allows to add jobs middleware', () => {
+      const spy = sinon.spy()
+      const testJob = job.of('job.name')
+      const connector = dummyConnector()
+
+      const queue = manager(connector)
+      queue.use(spy)
+
+      connector.stubJob(testJob)
+
+      expect(spy).to.have.been.calledOnce // eslint-disable-line
+      expect(spy.getCall(0).args[0]).to.equal(testJob)
+    })
+
+    it('passes modified job to handler', () => {
+      const handler = sinon.spy()
+      const connector = dummyConnector()
+      const modifiedJob = job.of('foo')
+
+      const queue = manager(connector)
+      queue.use((job, next) => {
+        next(modifiedJob)
+      })
+
+      queue.handle('foo', handler)
+
+      connector.stubJob(job.of('job.name'))
+
+      expect(handler).to.have.been.calledWith(modifiedJob)
+    })
+
+    it('should stop without calling next()', () => {
+      const handler = sinon.spy()
+      const connector = dummyConnector()
+
+      const queue = manager(connector)
+      queue.use(_ => {})
+
+      queue.handle('foo', handler)
+      connector.stubJob(job.of('job.name'))
+
+      expect(handler).not.to.have.been.called // eslint-disable-line
+    })
+
+    it('should call multiple middlewares', () => {
+      const handler = sinon.spy()
+      const connector = dummyConnector()
+      const fake = (job, next) => next(job)
+      const middlewares = [
+        sinon.stub().callsFake(fake),
+        sinon.stub().callsFake(fake)
+      ]
+
+      const queue = manager(connector)
+
+      middlewares.forEach(queue.use)
+
+      queue.handle('job.name', handler)
+      connector.stubJob(job.of('job.name'))
+
+      expect(middlewares[0]).to.have.been.calledOnce // eslint-disable-line
+      expect(middlewares[1]).to.have.been.calledOnce // eslint-disable-line
+      expect(handler).to.have.been.calledOnce // eslint-disable-line
+    })
+  })
 })

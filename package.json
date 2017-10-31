@@ -6,20 +6,23 @@
   "author": "Radoslaw Mejer <radmen@radmen.info>",
   "license": "MIT",
   "scripts": {
-    "test": "mocha ./test/*.spec.js ./test/**/*.spec.js",
+    "test": "DEBUG=desmart:queue mocha ./test/*.spec.js ./test/**/*.spec.js",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "prepush": "npm run lint"
   },
   "devDependencies": {
     "chai": "^4.1.2",
+    "chai-as-promised-compat": "^7.0.3",
     "husky": "^0.14.3",
     "mocha": "^4.0.1",
     "sinon": "^4.0.1",
     "sinon-chai": "^2.14.0",
     "standard": "^10.0.3"
   },
-  "dependencies": {},
+  "dependencies": {
+    "debug": "^3.1.0"
+  },
   "standard": {
     "globals": [
       "describe",

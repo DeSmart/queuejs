@@ -100,6 +100,74 @@ Each connector has to implement following methods:
 * `onJob(fn)` accepts callback which should receive `Job` instance once new message is retrieved from backend
 * `push(job)` push job to queue backend
 
+# middlewares
+
+It's possible to extend behaviour of manager with middlewares.
+
+Middleware is a function which should accept `job` and `next` callback. It's triggered once a job is fetched from backend and redirected to handler.  
+Through middleware it's possible to modify job (note that job is immutable), or do some other stuff. Don't forget to call `next` once you want to pass control to another middleware.
+
+Every middleware should (if possible) return the result of `next()`. Remember also that other middlewares may return a Promise so `async/await` may be useful here.
+
+## adding middleware
+
+```js
+const { manager, job } = require('@desmart/queue')
+const { autoCommit } = require('@desmart/queue/middleware')
+const syncConnector = require('@desmart/queue/src/connector/syncConnector')
+
+const queue = manager(syncConnector())
+queue.use(autoCommit())
+
+// each handle will be converted to terminating middleware - add them after all middlewares
+queue.handle('job', () => {})
+```
+
+## bundled middlewares
+
+Package comes with some bundled middlewares. They can be imported from `@desmart/queue/middleware` module.
+
+### `autoCommit`
+
+```js
+const { autoCommit } = require('@desmart/queue/middleware')
+
+queue.use(autoCommit({
+  exponential: true,
+  maxDelay: 6 * 3600
+}))
+```
+
+Waits for job to finish and removes it from queue. If job failed it will be released back to queue.  
+This will works only when **job handler returns a Promise**.
+
+Job is released with exponential delay. After first attempt it will be released without a delay, with second attempt it will be delayed by 5 seconds, later by 15 seconds and so on.. By defualt, after multiple fails, job will be delayed by 6 hours.
+
+Available options:
+
+* `exponential` (Boolean) [`true`] should failed job be released with exponential delay
+* `maxDelay` (Integer) [`21600`] maximum delay for failed jobs; used only when `exponential == true`
+
+### `maxAttempts`
+
+```js
+const { maxAttempts } = require('@desmart/queue/middleware')
+
+queue.use(maxAttempts(max = 3))
+```
+
+Removes automatically a job which failed more than `max` times.
+
+### `debug`
+
+```js
+const { debug } = require('@desmart/queue/middleware')
+
+queue.use(debug())
+```
+
+Small utility which uses [debug](https://github.com/visionmedia/debug) to print information about processed job status.
+
 # development
 
 If you're planning to contribute to the package please make sure to adhere to following conventions.
