@@ -1,6 +1,6 @@
 {
   "name": "@desmart/queue",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Message Queue client abstraction",
   "main": "index.js",
   "author": "Radoslaw Mejer <radmen@radmen.info>",
