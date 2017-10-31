@@ -9,7 +9,10 @@
     "test": "DEBUG=desmart:queue mocha ./test/*.spec.js ./test/**/*.spec.js",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "prepush": "npm run lint"
+    "prepush": "npm run lint",
+    "tag:patch": "npm version patch -m 'chore(package): bump version to %s'",
+    "tag:minor": "npm version minor -m 'chore(package): bump version to %s'",
+    "tag:major": "npm version major -m 'chore(package): bump version to %s'"
   },
   "devDependencies": {
     "chai": "^4.1.2",
