@@ -2,6 +2,31 @@
 
 This package provides a unified API across a variety of different queue backends.
 
+<!-- TOC -->
+
+- [@desmart/queue](#desmartqueue)
+- [installation](#installation)
+- [example](#example)
+- [job](#job)
+    - [creating new job](#creating-new-job)
+    - [handlers](#handlers)
+    - [pushing to queue backend](#pushing-to-queue-backend)
+- [listening to new jobs](#listening-to-new-jobs)
+- [connectors](#connectors)
+    - [api](#api)
+- [middlewares](#middlewares)
+    - [adding middleware](#adding-middleware)
+    - [bundled middlewares](#bundled-middlewares)
+        - [`autoCommit`](#autocommit)
+        - [`maxAttempts`](#maxattempts)
+        - [`debug`](#debug)
+- [development](#development)
+    - [tests & linting](#tests--linting)
+    - [general practices](#general-practices)
+    - [issues & PR](#issues--pr)
+
+<!-- /TOC -->
+
 # installation
 
 ```bash
