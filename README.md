@@ -193,6 +193,8 @@ queue.use(debug())
 
 Small utility which uses [debug](https://github.com/visionmedia/debug) to print information about processed job status.
 
+This middleware has to be used before `autoCommit`.
+
 # development
 
 If you're planning to contribute to the package please make sure to adhere to following conventions.
