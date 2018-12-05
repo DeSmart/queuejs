@@ -1,14 +1,23 @@
 const chai = require('chai')
 const sinon = require('sinon')
 const sinonChai = require('sinon-chai')
+const chaiAsPromisedCompat = require('chai-as-promised-compat')
 const { job } = require('../../')
 const { autoCommit } = require('../../middleware')
 
 chai.use(sinonChai)
+chai.use(chaiAsPromisedCompat)
 
 const { expect } = chai
 const delayedResolve = (wait = 0) => new Promise(resolve => setTimeout(resolve, wait))
-const delayedReject = (wait = 0) => new Promise((resolve, reject) => setTimeout(reject, wait))
+const delayedReject = (wait = 0) => new Promise(
+  (resolve, reject) => setTimeout(
+    () => {
+      reject(new Error())
+    },
+    wait
+  )
+)
 
 describe('middleware | autoCommit', () => {
   it('removes finished job', async () => {
@@ -27,7 +36,9 @@ describe('middleware | autoCommit', () => {
     const release = sinon.spy()
 
     const middleware = autoCommit({ exponential: false })
-    await middleware(job({ name: 'test', release }), next)
+
+    await expect(middleware(job({ name: 'test', release }), next))
+      .to.eventually.be.rejectedWith(Error)
 
     expect(release).to.have.been.calledWith(0)
   })
@@ -39,7 +50,11 @@ describe('middleware | autoCommit', () => {
     const iterations = 5
 
     for (let i = 1; i <= iterations; i++) {
-      await middleware(job({ release, attempts: i }), next)
+      try {
+        await middleware(job({ release, attempts: i }), next)
+      } catch (e) {
+        // ignore
+      }
     }
 
     for (let i = 1; i < iterations; i++) {
@@ -56,7 +71,11 @@ describe('middleware | autoCommit', () => {
     const middleware = autoCommit({ maxDelay: 1 })
 
     for (let i = 1; i <= 5; i++) {
-      await middleware(job({ release, attempts: i }), next)
+      try {
+        await middleware(job({ release, attempts: i }), next)
+      } catch (e) {
+        // ignore
+      }
     }
 
     release.getCalls()

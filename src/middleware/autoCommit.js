@@ -16,5 +16,7 @@ module.exports = ({
     return result
   } catch (error) {
     await job.release(exponential ? getDelay(job.attempts, maxDelay) : 0)
+
+    throw error
   }
 }
