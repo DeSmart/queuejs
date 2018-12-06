@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 
+## [1.1.1] - 2018-12-06
+### Fixed
+- `autoCommit` will throw catched exception ([7f4f5ff](https://github.com/DeSmart/queuejs/commit/7f4f5ff5496dd8e659c5b68c4db8492762e81f46))
+
 ## [1.1.0] - 2017-10-31
 ### Added
 - This CHANGELOG
@@ -27,6 +31,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Job object
 - Job handlers
 
-[Unreleased]: https://github.com/DeSmart/queuejs/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/DeSmart/queuejs/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/DeSmart/queuejs/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/DeSmart/queuejs/compare/1.0.0...v1.1.0
 [1.0.0]: https://github.com/DeSmart/queuejs/compare/157be2f...1.0.0
